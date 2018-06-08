@@ -6,7 +6,7 @@ import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface HackerNewsAPI {
+interface HackerNewsRemote {
 
     @GET("topstories.json?print=pretty")
     fun getTopPostId(): Observable<List<String>>

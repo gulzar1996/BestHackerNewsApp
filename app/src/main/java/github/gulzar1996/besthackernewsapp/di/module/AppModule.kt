@@ -5,8 +5,8 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import github.gulzar1996.besthackernewsapp.Const
-import github.gulzar1996.besthackernewsapp.data.db.DataOperation
-import github.gulzar1996.besthackernewsapp.data.network.HackerNewsAPI
+import github.gulzar1996.besthackernewsapp.data.db.HackerNewsLocal
+import github.gulzar1996.besthackernewsapp.data.network.HackerNewsRemote
 import github.gulzar1996.besthackernewsapp.utils.rx.AppSchedulerProvider
 import github.gulzar1996.besthackernewsapp.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +26,7 @@ class AppModule {
      * Retrofit
      */
     @Provides
-    internal fun provideHackerNewsApi(retrofit: Retrofit): HackerNewsAPI = retrofit.create(HackerNewsAPI::class.java)
+    internal fun provideHackerNewsApi(retrofit: Retrofit): HackerNewsRemote = retrofit.create(HackerNewsRemote::class.java)
 
     @Provides
     @Singleton
@@ -39,11 +39,11 @@ class AppModule {
 
 
     /**
-     * DataOperation
+     * HackerNewsLocal
      */
 
     @Provides
-    fun provideDataOperation() = DataOperation()
+    fun provideDataOperation() = HackerNewsLocal()
 
     /**
      * Rx

@@ -2,12 +2,12 @@ package github.gulzar1996.besthackernewsapp.data.db
 
 import github.gulzar1996.besthackernewsapp.data.Comment
 import github.gulzar1996.besthackernewsapp.data.Post
-import github.gulzar1996.besthackernewsapp.data.TopPostList
+import github.gulzar1996.besthackernewsapp.data.PostList
 import io.reactivex.Single
 import io.realm.Realm
 import io.realm.kotlin.where
 
-class DataOperation : IDataOperation {
+class HackerNewsLocal : IHackerNewsLocal {
 
     override fun getPost(postId: Int): Single<Post> =
             Single.create({
@@ -27,10 +27,10 @@ class DataOperation : IDataOperation {
     override fun getTopPostId(): Single<List<String>> = Single.create({
         try {
             val r: Realm = Realm.getDefaultInstance()
-            val topPostList: TopPostList? = r.where<TopPostList>().findFirst()
-            return@create when (topPostList) {
+            val postList: PostList? = r.where<PostList>().findFirst()
+            return@create when (postList) {
                 null -> it.onError(NullPointerException("Not found"))
-                else -> it.onSuccess(topPostList.list)
+                else -> it.onSuccess(postList.list)
             }
         } catch (e: Exception) {
             it.onError(e)
@@ -55,7 +55,7 @@ class DataOperation : IDataOperation {
     }
 
 
-    override fun saveTopPostList(ids: TopPostList): TopPostList {
+    override fun saveTopPostList(ids: PostList): PostList {
         val r: Realm = Realm.getDefaultInstance()
         try {
             r.executeTransaction({

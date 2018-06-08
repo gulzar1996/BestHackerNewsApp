@@ -4,7 +4,8 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-public open class TopPostList(
+public open class PostList(
         @PrimaryKey open var id: Long = 0,
-        open var list: RealmList<String> = RealmList()
+        open var list: RealmList<String> = RealmList(),
+        open var timeStamp: Long = 0
 ) : RealmObject()

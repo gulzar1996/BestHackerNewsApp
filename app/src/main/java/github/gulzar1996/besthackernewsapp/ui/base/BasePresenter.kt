@@ -1,7 +1,5 @@
-package github.gulzar1996.wheelstreetc.ui.base
+package github.gulzar1996.besthackernewsapp.ui.base
 
-import github.gulzar1996.besthackernewsapp.ui.base.IBaseInteractor
-import github.gulzar1996.besthackernewsapp.ui.base.IBaseView
 import github.gulzar1996.besthackernewsapp.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -23,7 +21,7 @@ open class BasePresenter<V : IBaseView, I : IBaseInteractor>
     }
 
     override fun onDetach() {
-        compositeDisposable?.dispose()
+        compositeDisposable.dispose()
     }
 
 }

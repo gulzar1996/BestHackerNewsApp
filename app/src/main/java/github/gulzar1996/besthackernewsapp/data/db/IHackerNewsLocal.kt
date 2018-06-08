@@ -2,10 +2,10 @@ package github.gulzar1996.besthackernewsapp.data.db
 
 import github.gulzar1996.besthackernewsapp.data.Comment
 import github.gulzar1996.besthackernewsapp.data.Post
-import github.gulzar1996.besthackernewsapp.data.TopPostList
+import github.gulzar1996.besthackernewsapp.data.PostList
 import io.reactivex.Single
 
-interface IDataOperation {
+interface IHackerNewsLocal {
 
     /**
      *  inserting objects to the DB
@@ -15,7 +15,7 @@ interface IDataOperation {
      */
     fun savePost(post: Post): Post
 
-    fun saveTopPostList(ids: TopPostList): TopPostList
+    fun saveTopPostList(ids: PostList): PostList
 
     fun saveComment(comment: Comment): Single<Comment>
 
