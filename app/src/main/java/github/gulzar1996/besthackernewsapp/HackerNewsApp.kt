@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Application
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import github.gulzar1996.besthackernewsapp.di.component.DaggerAppComponent
+import io.realm.Realm
 import javax.inject.Inject
 
 class HackerNewsApp : Application(), HasActivityInjector {
@@ -16,6 +18,7 @@ class HackerNewsApp : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
+        Realm.init(this)
         DaggerAppComponent.builder()
                 .application(this)
                 .build()
