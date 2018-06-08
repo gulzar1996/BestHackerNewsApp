@@ -13,12 +13,13 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
         IHomePresenter<V, I> {
 
     var page = 0
+    var isCacheDirty = false
 
     val TAG: String = javaClass.simpleName
 
     override fun loadInitial() {
         compositeDisposable.add(
-                interactor.getHackerNews(page)
+                interactor.getHackerNews(page, isCacheDirty)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribe({ it -> Log.d(TAG, it.size.toString()) },
@@ -27,13 +28,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
     }
 
     fun loadPost() {
-        compositeDisposable.addAll(
-                interactor.getPostFromDisk(17267368)
-                        .subscribeOn(schedulerProvider.io())
-                        .observeOn(schedulerProvider.ui())
-                        .subscribe({ it ->
-                            Log.d(TAG, it?.title)
-                        }, { err -> Log.d(TAG, err.localizedMessage) }))
+
     }
 
 }

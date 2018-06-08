@@ -21,11 +21,16 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
     private val pageLimit = 20
 
 
-    override fun getHackerNews(pageNo: Int): Single<List<Post>> = Observable.concat(
-            getFromDisk(pageNo).onErrorResumeNext(Observable.empty()),
-            getFromNetwork(pageNo))
-            .filter { !it.isEmpty() }
-            .first(emptyList())
+    override fun getHackerNews(pageNo: Int, isCacheDirty: Boolean): Single<List<Post>> =
+            when (isCacheDirty) {
+                false -> Observable.concat(
+                        getFromDisk(pageNo).onErrorResumeNext(Observable.empty()),
+                        getFromNetwork(pageNo))
+                        .filter { !it.isEmpty() }
+                        .first(emptyList())
+                true -> getFromNetwork(pageNo).first(emptyList())
+            }
+
 
     /**
      * NETWORK ONLY
@@ -35,25 +40,24 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
 
             hackerNewsRemote.getTopPostId()
                     .map {
-                        saveTopPostListToDisk(PostList(id = 0
-                                , timeStamp = System.currentTimeMillis()
-                                , list = when (it) {
-                            null -> RealmList()
-                            else -> {
-                                val realmList: RealmList<String> = RealmList()
-                                realmList.addAll(it)
-                                realmList
-                            }
-                        }))
+                        hackerNewsLocal.saveTopPostList(
+                                PostList(id = 0
+                                        , timeStamp = System.currentTimeMillis()
+                                        , list = when (it) {
+                                    null -> RealmList()
+                                    else -> {
+                                        val realmList: RealmList<String> = RealmList()
+                                        realmList.addAll(it)
+                                        realmList
+                                    }
+                                }))
                     }
                     .flatMap { it -> Observable.just(it.list) }
                     .concatMapIterable { it }
                     .skip(((pageLimit * (page + 1)) - pageLimit).toLong())
                     .take(pageLimit.toLong())
                     .concatMapEager { it -> hackerNewsRemote.getPostDetails(it.toInt()) }
-                    .map { it ->
-                        savePostToDisk(it)
-                    }
+                    .map { it -> hackerNewsLocal.savePost(it) }
                     .filter { !it.title.isEmpty() }
                     .toList()
                     .toObservable()
@@ -66,7 +70,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
      */
     private fun getFromDisk(page: Int): Observable<List<Post>> =
 
-            getTopPostListFromDisk()
+            hackerNewsLocal.getTopPostId()
                     .toObservable()
                     .concatMapIterable { it }
                     .skip(((pageLimit * (page + 1)) - pageLimit).toLong())
@@ -86,36 +90,12 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
      * Hack is used to fallback to network by making the post id =-1
      */
     private fun getPostDetails(it: String) =
-            Observable.concat(getPostFromDisk(it.toInt())
+            Observable.concat(hackerNewsLocal.getPost(it.toInt()).toObservable()
                     .onErrorResumeNext(Observable.just(Post(id = -1)))
                     , hackerNewsRemote.getPostDetails(it.toInt()))
                     .filter { it.id.toInt() != -1 }
                     .first(Post())
                     .toObservable()
-
-
-    /**
-     * Queries post by postId from persistence
-     * @param postId
-     */
-    fun getPostFromDisk(postId: Int): Observable<Post> = hackerNewsLocal.getPost(postId).toObservable()
-
-    /**
-     * Saves post to persistence
-     * @param postId
-     */
-    fun savePostToDisk(post: Post) = hackerNewsLocal.savePost(post)
-
-    /**
-     * Save top post Id List and timestamp to persistence to persistence
-     * @param postId
-     */
-    fun saveTopPostListToDisk(postList: PostList) = hackerNewsLocal.saveTopPostList(postList)
-
-    /**
-     * Retrieves List of top post id from persistence
-     */
-    fun getTopPostListFromDisk(): Single<List<String>> = hackerNewsLocal.getTopPostId()
 
 
 }

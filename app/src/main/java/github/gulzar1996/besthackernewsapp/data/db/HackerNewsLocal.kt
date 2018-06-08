@@ -9,6 +9,10 @@ import io.realm.kotlin.where
 
 class HackerNewsLocal : IHackerNewsLocal {
 
+    /**
+     * Queries post by postId from persistence
+     * @param postId
+     */
     override fun getPost(postId: Int): Single<Post> =
             Single.create({
                 try {
@@ -23,6 +27,9 @@ class HackerNewsLocal : IHackerNewsLocal {
                 }
             })
 
+    /**
+     * Retrieves List of top post id from persistence
+     */
 
     override fun getTopPostId(): Single<List<String>> = Single.create({
         try {
@@ -36,6 +43,11 @@ class HackerNewsLocal : IHackerNewsLocal {
             it.onError(e)
         }
     })
+
+    /**
+     * Saves post to persistence
+     * @param postId
+     */
 
     override fun savePost(post: Post): Post {
         val r: Realm = Realm.getDefaultInstance()
@@ -54,6 +66,10 @@ class HackerNewsLocal : IHackerNewsLocal {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    /**
+     * Save top post Id List and timestamp to persistence to persistence
+     * @param postId
+     */
 
     override fun saveTopPostList(ids: PostList): PostList {
         val r: Realm = Realm.getDefaultInstance()

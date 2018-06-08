@@ -6,7 +6,7 @@ import io.reactivex.Single
 
 interface IHomeInteractor : IBaseInteractor {
 
-    fun getHackerNews(pageNo : Int) : Single<List<Post>>
+    fun getHackerNews(pageNo: Int, isCacheDirty: Boolean): Single<List<Post>>
 
 
 }
