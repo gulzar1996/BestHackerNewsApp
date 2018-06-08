@@ -1,4 +1,4 @@
-package github.gulzar1996.besthackernewsapp.base
+package github.gulzar1996.besthackernewsapp.ui.base
 
 interface IBaseView {
     fun showProgress()

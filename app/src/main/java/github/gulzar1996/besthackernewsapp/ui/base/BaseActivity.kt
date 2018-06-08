@@ -1,9 +1,8 @@
-package github.gulzar1996.besthackernewsapp.base
+package github.gulzar1996.besthackernewsapp.ui.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import dagger.android.AndroidInjection
-import github.gulzar1996.besthackernewsapp.base.IBaseView
 
 open class BaseActivity : AppCompatActivity(), IBaseView {
 
