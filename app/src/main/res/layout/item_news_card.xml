@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#EFEFEF"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:minHeight="72dp"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat"
+        android:text="TextView"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/upVotes"
+        app:layout_constraintTop_toBottomOf="@+id/url" />
+
+    <TextView
+        android:id="@+id/upVotes"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:background="#FFC9A5"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:text="15"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="56dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:textColor="#626262"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/montserrat"
+
+        app:layout_constraintEnd_toStartOf="@+id/descendant"
+        app:layout_constraintStart_toEndOf="@+id/upVotes"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TextView" />
+
+    <TextView
+        android:id="@+id/descendant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:drawableTop="@drawable/ic_message"
+        android:text="45"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:drawablePadding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/url"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textColor="#797979"
+        android:textSize="11sp"
+        android:textStyle="italic"
+
+        app:layout_constraintEnd_toStartOf="@+id/descendant"
+        app:layout_constraintStart_toEndOf="@+id/upVotes"
+        app:layout_constraintTop_toBottomOf="@+id/header_label" />
+
+    <TextView
+        android:id="@+id/by"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/montserrat"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/descendant"
+        app:layout_constraintStart_toEndOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="."
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/by"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toEndOf="@+id/time" />
+</android.support.constraint.ConstraintLayout>
+
+<!--<TextView-->
+<!--android:id="@+id/header_label"-->
+<!--tools:text="Whats your swag ?"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:fontFamily="@font/montserrat"-->
+<!--android:gravity="center_vertical"-->
+<!--android:paddingBottom="2dp"-->
+<!--android:textColor="@color/headingColor"-->
+<!--android:textSize="14sp"-->
+<!--android:textStyle="bold" />-->
