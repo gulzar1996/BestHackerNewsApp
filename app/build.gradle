@@ -45,9 +45,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger2Version"
     implementation "com.google.dagger:dagger-android-support:$rootProject.dagger2Version"
 
-
+    implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
 
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
