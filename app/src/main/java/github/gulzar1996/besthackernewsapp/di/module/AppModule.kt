@@ -8,6 +8,7 @@ import github.gulzar1996.besthackernewsapp.Const
 import github.gulzar1996.besthackernewsapp.data.db.HackerNewsLocal
 import github.gulzar1996.besthackernewsapp.data.network.HackerNewsRemote
 import github.gulzar1996.besthackernewsapp.utils.rx.AppSchedulerProvider
+import github.gulzar1996.besthackernewsapp.utils.rx.RxBus
 import github.gulzar1996.besthackernewsapp.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
@@ -55,5 +56,8 @@ class AppModule {
     @Provides
     fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
 
+    @Singleton
+    @Provides
+    fun provideRxBus(): RxBus = RxBus()
 
 }
