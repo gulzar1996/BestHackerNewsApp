@@ -102,13 +102,13 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
                 false -> {
                     Observable.concat(hackerNewsLocal.getPost(it.toInt())
                             .toObservable()
-                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM DISK page : ${it.title}") })
+                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM DISK page  : ${it.id}") })
                             .onErrorResumeNext(Observable.just(Post(id = -1)))
                             , hackerNewsRemote.getPostDetails(it.toInt())
                             .onErrorResumeNext(Observable.just(Post(id = -1)))
                             .filter { it.id.toInt() != -1 }
                             .map { it -> hackerNewsLocal.savePost(it) }
-                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page : ${it.title}") })
+                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page : ${it.id}") })
                             .subscribeOn(Schedulers.io()))
                             .filter { it.id.toInt() != -1 }
                             .first(Post())
@@ -117,7 +117,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
                 true -> {
                     hackerNewsRemote.getPostDetails(it.toInt())
                             .map { it -> hackerNewsLocal.savePost(it) }
-                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page : ${it.title}") })
+                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page CacheDirty? : $isCacheDirty : ${it.id}") })
                             .subscribeOn(Schedulers.io())
                 }
             }

@@ -20,7 +20,7 @@ class HackerNewsLocal : IHackerNewsLocal {
                     val post: Post? = r.where<Post>().equalTo(Post.ID, postId).findFirst()
                     return@create when (post) {
                         null -> it.onError(NullPointerException("Not found"))
-                        else -> it.onSuccess(post)
+                        else -> it.onSuccess(r.copyFromRealm(post))
                     }
                 } catch (e: Exception) {
                     it.onError(e)
@@ -37,7 +37,7 @@ class HackerNewsLocal : IHackerNewsLocal {
             val postList: PostList? = r.where<PostList>().findFirst()
             return@create when (postList) {
                 null -> it.onError(NullPointerException("Not found"))
-                else -> it.onSuccess(postList.list)
+                else -> it.onSuccess(r.copyFromRealm(postList).list)
             }
         } catch (e: Exception) {
             it.onError(e)
