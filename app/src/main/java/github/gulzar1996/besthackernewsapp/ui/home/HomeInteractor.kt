@@ -25,14 +25,14 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
     val TAG = javaClass.simpleName
 
 
-    override fun getHackerNews(pageNo: Int, isCacheDirty: Boolean): Single<List<Post>> =
-            when (isCacheDirty) {
+    override fun getHackerNews(pageNo: Int, isPostCacheDirty: Boolean, isListCacheDirty: Boolean): Single<List<Post>> =
+            when (isPostCacheDirty && isListCacheDirty) {
                 false -> Observable.concat(
-                        getFromDisk(pageNo).onErrorResumeNext(Observable.empty()),
-                        getFromNetwork(pageNo))
+                        getFromDisk(pageNo, isPostCacheDirty).onErrorResumeNext(Observable.empty()),
+                        getFromNetwork(pageNo, isPostCacheDirty))
                         .filter { !it.isEmpty() }
                         .first(emptyList())
-                true -> getFromNetwork(pageNo).first(emptyList())
+                true -> getFromNetwork(pageNo, isPostCacheDirty).first(emptyList())
             }
 
 
@@ -40,7 +40,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
      * NETWORK ONLY
      * All the operations are fetched from network and persisted on the disk
      */
-    private fun getFromNetwork(page: Int): Observable<List<Post>> =
+    private fun getFromNetwork(page: Int, isCacheDirty: Boolean): Observable<List<Post>> =
             hackerNewsRemote.getTopPostId()
                     .doOnNext({ Log.d(TAG, "Loading from Network page : $page") })
                     .subscribeOn(Schedulers.io())
@@ -61,8 +61,9 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
                     .concatMapIterable { it }
                     .skip(((pageLimit * (page + 1)) - pageLimit).toLong())
                     .take(pageLimit.toLong())
-                    .concatMapEager { it -> hackerNewsRemote.getPostDetails(it.toInt()) }
-                    .map { it -> hackerNewsLocal.savePost(it) }
+                    .concatMapEager { it ->
+                        getPostDetails(it, isCacheDirty)
+                    }
                     .filter { !it.title.isEmpty() }
                     .toList()
                     .toObservable()
@@ -73,7 +74,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
      * Top post Id List is fetched from DISK
      * Post details id fetched from DISK + NETWORK
      */
-    private fun getFromDisk(page: Int): Observable<List<Post>> =
+    private fun getFromDisk(page: Int, isCacheDirty: Boolean): Observable<List<Post>> =
 
             hackerNewsLocal.getTopPostId()
                     .toObservable()
@@ -82,7 +83,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
                     .skip(((pageLimit * (page + 1)) - pageLimit).toLong())
                     .take(pageLimit.toLong())
                     .concatMapEager { it ->
-                        getPostDetails(it)
+                        getPostDetails(it, isCacheDirty)
                     }
                     .filter { !it.title.isEmpty() }
                     .toList()
@@ -95,20 +96,31 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
      * otherwise from network
      * Hack is used to fallback to network by making the post id =-1
      */
-    private fun getPostDetails(it: String) =
-            Observable.concat(hackerNewsLocal.getPost(it.toInt())
-                    .toObservable()
-                    .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM DISK page : ${it.title}") })
-                    .onErrorResumeNext(Observable.just(Post(id = -1)))
-                    , hackerNewsRemote.getPostDetails(it.toInt())
-                    .onErrorResumeNext(Observable.just(Post(id = -1)))
-                    .filter { it.id.toInt() != -1 }
-                    .map { it -> hackerNewsLocal.savePost(it) }
-                    .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page : ${it.title}") })
-                    .subscribeOn(Schedulers.io()))
-                    .filter { it.id.toInt() != -1 }
-                    .first(Post())
-                    .toObservable()
+    private fun getPostDetails(it: String, isCacheDirty: Boolean) =
+
+            when (isCacheDirty) {
+                false -> {
+                    Observable.concat(hackerNewsLocal.getPost(it.toInt())
+                            .toObservable()
+                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM DISK page : ${it.title}") })
+                            .onErrorResumeNext(Observable.just(Post(id = -1)))
+                            , hackerNewsRemote.getPostDetails(it.toInt())
+                            .onErrorResumeNext(Observable.just(Post(id = -1)))
+                            .filter { it.id.toInt() != -1 }
+                            .map { it -> hackerNewsLocal.savePost(it) }
+                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page : ${it.title}") })
+                            .subscribeOn(Schedulers.io()))
+                            .filter { it.id.toInt() != -1 }
+                            .first(Post())
+                            .toObservable()
+                }
+                true -> {
+                    hackerNewsRemote.getPostDetails(it.toInt())
+                            .map { it -> hackerNewsLocal.savePost(it) }
+                            .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM NETWORK page : ${it.title}") })
+                            .subscribeOn(Schedulers.io())
+                }
+            }
 
 
 }
