@@ -2,8 +2,8 @@ package github.gulzar1996.besthackernewsapp.ui.home
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.widget.Toast
-import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.data.Post
 import github.gulzar1996.besthackernewsapp.ui.base.BaseActivity
@@ -32,15 +32,15 @@ class HomeActivity : BaseActivity(), IHomeView {
         homePresenter.onAttach(this)
 
         listUISetup()
-        refreshListener()
+        toolbarSetup()
 
         homePresenter.paginationSetup()
 
     }
 
-    private fun refreshListener() {
-        RxSwipeRefreshLayout
-                .refreshes(swipeRefresh)
+    private fun toolbarSetup() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
     }
 
     override fun getRefresh() = swipeRefresh
@@ -65,6 +65,11 @@ class HomeActivity : BaseActivity(), IHomeView {
 
     override fun showToast(string: String) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun setLastRefershedTime(string: String) {
+        refreshedTime.visibility = View.VISIBLE
+        refreshedTime.text = string
     }
 
     override fun onDestroy() {
