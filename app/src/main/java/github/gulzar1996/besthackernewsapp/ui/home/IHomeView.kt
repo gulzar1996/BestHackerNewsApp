@@ -14,4 +14,6 @@ interface IHomeView : IBaseView {
 
     fun getRefresh(): SwipeRefreshLayout
 
+    fun setLastRefershedTime(string: String)
+
 }

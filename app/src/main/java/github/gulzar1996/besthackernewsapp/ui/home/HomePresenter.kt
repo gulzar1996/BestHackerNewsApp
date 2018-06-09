@@ -7,7 +7,6 @@ import github.gulzar1996.besthackernewsapp.ui.base.BasePresenter
 import github.gulzar1996.besthackernewsapp.utils.rx.RxBus
 import github.gulzar1996.besthackernewsapp.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
@@ -30,7 +29,6 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
 
     lateinit var paginator: PublishProcessor<Int>
     var currentPage = 0
-    var d: Disposable? = null
 
     init {
         loadPost()
@@ -63,7 +61,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
 
         paginator = PublishProcessor.create()
 
-        d = paginator
+        compositeDisposable.add(paginator
                 .onBackpressureDrop()
                 .filter {
                     Log.d(TAG, "loading Sate $it Current Page $currentPage")
@@ -73,6 +71,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                 .concatMap { _ ->
                     interactor.getHackerNews(currentPage, isCacheDirty, isListCacheDirty)
                             .toFlowable()
+                            .retryWhen { it -> it }
                 }
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
@@ -85,6 +84,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                         else -> getView.addToAdapter(it as ArrayList<Post>)
                     }
 
+                    loadRefreshedTime()
                     isLoading = false
                     currentPage++
 
@@ -103,7 +103,17 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                     getView.showToast(err.toString())
                     getView.getRefresh().isRefreshing = false
 
-                })
+                }))
     }
 
+    private fun loadRefreshedTime() {
+        compositeDisposable.add(interactor.getLastRefreshedTime()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .filter { !it.isEmpty() }
+                .subscribe({ getView.setLastRefershedTime(it) },
+                        { e ->
+                            Log.e(TAG, e.toString())
+                        }))
+    }
 }

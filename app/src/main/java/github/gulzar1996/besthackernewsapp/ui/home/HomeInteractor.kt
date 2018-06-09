@@ -9,6 +9,8 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.realm.RealmList
+import org.ocpsoft.prettytime.PrettyTime
+import java.util.*
 import javax.inject.Inject
 
 class HomeInteractor @Inject constructor() : IHomeInteractor {
@@ -121,6 +123,9 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
                             .subscribeOn(Schedulers.io())
                 }
             }
+
+    override fun getLastRefreshedTime(): Single<String> = hackerNewsLocal.getLastRefreshedTime()
+            .flatMap { it -> Single.just(PrettyTime().format(Date(it))) }
 
 
 }

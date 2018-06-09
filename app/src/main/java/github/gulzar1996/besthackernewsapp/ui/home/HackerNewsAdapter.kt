@@ -8,6 +8,8 @@ import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.data.Post
 import github.gulzar1996.besthackernewsapp.utils.rx.RxBus
 import kotlinx.android.synthetic.main.item_news_card.view.*
+import org.ocpsoft.prettytime.PrettyTime
+import java.util.*
 
 
 class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -63,6 +65,12 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
     class NewsCardViewholder(itemView: View?) : RecyclerView.ViewHolder(itemView), ViewH {
         override fun bind(post: Post) {
             itemView.header_label.text = post.title
+            itemView.upVotes.text = post.score.toString()
+            itemView.url.text = post.url
+            itemView.descendant.text = post.descendants
+            itemView.by.text = post.by
+            itemView.time.text = PrettyTime().format(Date(post.time * 1000))
+
         }
     }
 

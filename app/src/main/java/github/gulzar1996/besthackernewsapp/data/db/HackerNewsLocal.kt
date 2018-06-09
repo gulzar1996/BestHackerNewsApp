@@ -9,6 +9,7 @@ import io.realm.kotlin.where
 
 class HackerNewsLocal : IHackerNewsLocal {
 
+
     /**
      * Queries post by postId from persistence
      * @param postId
@@ -83,6 +84,19 @@ class HackerNewsLocal : IHackerNewsLocal {
         }
         return ids
     }
+
+    override fun getLastRefreshedTime(): Single<Long> = Single.create({
+        try {
+            val r: Realm = Realm.getDefaultInstance()
+            val postList: PostList? = r.where<PostList>().findFirst()
+            return@create when (postList) {
+                null -> it.onError(NullPointerException("Not found"))
+                else -> it.onSuccess(r.copyFromRealm(postList).timeStamp)
+            }
+        } catch (e: Exception) {
+            it.onError(e)
+        }
+    })
 
     override fun saveComment(comment: Comment): Single<Comment> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

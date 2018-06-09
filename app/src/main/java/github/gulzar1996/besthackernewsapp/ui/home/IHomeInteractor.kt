@@ -8,5 +8,7 @@ interface IHomeInteractor : IBaseInteractor {
 
     fun getHackerNews(pageNo: Int, isPostCacheDirty: Boolean, isListCacheDirty: Boolean): Single<List<Post>>
 
+    fun getLastRefreshedTime(): Single<String>
+
 
 }
