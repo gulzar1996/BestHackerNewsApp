@@ -25,7 +25,7 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
 
     fun addItems(posts: ArrayList<Post>) {
         this.posts.addAll(posts)
-        notifyItemInserted(posts.size - 1)
+        notifyItemInserted(posts.size)
     }
 
     fun removeItems() {
