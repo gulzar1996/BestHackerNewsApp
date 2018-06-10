@@ -4,19 +4,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import dagger.android.AndroidInjection
 
-open class BaseActivity : AppCompatActivity(), IBaseView {
+abstract class BaseActivity : AppCompatActivity(), IBaseView, BaseFragment.CallBack {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setupDI()
-    }
-
-    override fun showProgress() {
-
-    }
-
-    override fun hideProgress() {
+        super.onCreate(savedInstanceState)
     }
 
     private fun setupDI() = AndroidInjection.inject(this)
