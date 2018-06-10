@@ -1,7 +1,11 @@
 package github.gulzar1996.besthackernewsapp.ui.detail
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.widget.Toast
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import github.gulzar1996.besthackernewsapp.Const
 import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.ui.base.BaseActivity
@@ -11,14 +15,19 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import javax.inject.Inject
 
 
-class DetailActivity : BaseActivity(), IDetailView {
+class DetailActivity : BaseActivity(), IDetailView, HasSupportFragmentInjector {
 
+
+    @Inject
+    internal lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject
     lateinit var detailPresenter: DetailPresenter<IDetailView, IDetailInteractor>
 
     @Inject
     lateinit var viewPagerAdapter: ViewPagerAdapter
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentDispatchingAndroidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
