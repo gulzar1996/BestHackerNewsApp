@@ -71,7 +71,7 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
             itemView.descendant.text = post.descendants
             itemView.by.text = post.by
             itemView.time.text = PrettyTime().format(Date(post.time * 1000))
-            itemView.setOnClickListener { rxBus.publish(HackerNewsClick()) }
+            itemView.setOnClickListener { rxBus.publish(HackerNewsClick(post.id)) }
 
         }
     }
@@ -84,6 +84,6 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
 
     open class HackerNewsPaginator()
 
-    open class HackerNewsClick()
+    data class HackerNewsClick(val id: Long)
 
 }
