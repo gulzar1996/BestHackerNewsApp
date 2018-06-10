@@ -1,16 +1,15 @@
 package github.gulzar1996.besthackernewsapp.ui.login
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.jakewharton.rxbinding2.view.RxView
 import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.ui.base.BaseActivity
@@ -23,6 +22,7 @@ import javax.inject.Inject
 
 
 class LoginActivity : BaseActivity(), ILoginView {
+
 
 
     @Inject
@@ -88,7 +88,7 @@ class LoginActivity : BaseActivity(), ILoginView {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 try {
                     val account = task.getResult(ApiException::class.java)
-                    firebaseAuthWithGoogle(acct = account)
+                    loginPresenter.firebaseAuthWithGoogle(account, auth)
                 } catch (e: ApiException) {
                     showToast("FAILED")
                 }
@@ -97,22 +97,22 @@ class LoginActivity : BaseActivity(), ILoginView {
         }
     }
 
-    fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
-    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
+    override fun showProgress() {
         progressBar.visibility = View.VISIBLE
-        auth?.signInWithCredential(credential)
-                ?.addOnCompleteListener(this, {
-                    progressBar.visibility = View.GONE
-                    when (it.isSuccessful) {
-                        false -> showToast("FAILED")
-                        true -> navigateToHomeActivty()
-                    }
-                })
     }
 
-    fun navigateToHomeActivty() {
-        startActivity(Intent(this, HomeActivity::class.java))
+    override fun hideProgress() {
+        progressBar.visibility = View.GONE
     }
+
+    override fun context(): Activity = this
+
+    override fun navigateToHomeActivty() = startActivity(Intent(this, HomeActivity::class.java))
+
+    override fun onFragmentDetached(tag: String) {}
+
+    override fun onFragmentAttached() {}
 }
