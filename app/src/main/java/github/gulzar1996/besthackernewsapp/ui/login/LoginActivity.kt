@@ -24,7 +24,6 @@ import javax.inject.Inject
 class LoginActivity : BaseActivity(), ILoginView {
 
 
-
     @Inject
     lateinit var loginPresenter: LoginPresenter<ILoginView, IloginInteractor>
 
@@ -110,7 +109,10 @@ class LoginActivity : BaseActivity(), ILoginView {
 
     override fun context(): Activity = this
 
-    override fun navigateToHomeActivty() = startActivity(Intent(this, HomeActivity::class.java))
+    override fun navigateToHomeActivty() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
+    }
 
     override fun onFragmentDetached(tag: String) {}
 
