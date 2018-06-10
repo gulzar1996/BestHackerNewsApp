@@ -79,6 +79,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
     private fun getFromDisk(page: Int, isCacheDirty: Boolean): Observable<List<Post>> =
 
             hackerNewsLocal.getTopPostId()
+                    .subscribeOn(Schedulers.io())
                     .toObservable()
                     .doOnNext({ Log.d(TAG, "Loading from DISK page : $page") })
                     .concatMapIterable { it }
@@ -103,10 +104,12 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
             when (isCacheDirty) {
                 false -> {
                     Observable.concat(hackerNewsLocal.getPost(it.toInt())
+                            .subscribeOn(Schedulers.io())
                             .toObservable()
                             .doOnNext({ Log.d(TAG, "Loading from POST DETAILS FROM DISK page  : ${it.id}") })
                             .onErrorResumeNext(Observable.just(Post(id = -1)))
                             , hackerNewsRemote.getPostDetails(it.toInt())
+                            .subscribeOn(Schedulers.io())
                             .onErrorResumeNext(Observable.just(Post(id = -1)))
                             .filter { it.id.toInt() != -1 }
                             .map { it -> hackerNewsLocal.savePost(it) }

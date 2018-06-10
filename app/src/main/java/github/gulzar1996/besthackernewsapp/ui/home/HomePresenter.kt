@@ -81,7 +81,9 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                             getView.deleteAdapter()
                             getView.addToAdapter(it as ArrayList<Post>)
                         }
-                        else -> getView.addToAdapter(it as ArrayList<Post>)
+                        else -> {
+                            getView.addToAdapter(it as ArrayList<Post>)
+                        }
                     }
 
                     loadRefreshedTime()
