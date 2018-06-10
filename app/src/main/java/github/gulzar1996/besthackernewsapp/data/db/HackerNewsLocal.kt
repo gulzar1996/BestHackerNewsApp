@@ -20,8 +20,15 @@ class HackerNewsLocal : IHackerNewsLocal {
                     val r: Realm = Realm.getDefaultInstance()
                     val post: Post? = r.where<Post>().equalTo(Post.ID, postId).findFirst()
                     return@create when (post) {
-                        null -> it.onError(NullPointerException("Not found"))
-                        else -> it.onSuccess(r.copyFromRealm(post))
+                        null -> {
+                            r.close()
+                            it.onError(NullPointerException("Not found"))
+                        }
+                        else -> {
+                            val t = r.copyFromRealm(post)
+                            r.close()
+                            it.onSuccess(t)
+                        }
                     }
                 } catch (e: Exception) {
                     it.onError(e)
@@ -37,8 +44,15 @@ class HackerNewsLocal : IHackerNewsLocal {
             val r: Realm = Realm.getDefaultInstance()
             val postList: PostList? = r.where<PostList>().findFirst()
             return@create when (postList) {
-                null -> it.onError(NullPointerException("Not found"))
-                else -> it.onSuccess(r.copyFromRealm(postList).list)
+                null -> {
+                    r.close()
+                    it.onError(NullPointerException("Not found"))
+                }
+                else -> {
+                    val t = r.copyFromRealm(postList).list
+                    r.close()
+                    it.onSuccess(t)
+                }
             }
         } catch (e: Exception) {
             it.onError(e)
@@ -90,8 +104,15 @@ class HackerNewsLocal : IHackerNewsLocal {
             val r: Realm = Realm.getDefaultInstance()
             val postList: PostList? = r.where<PostList>().findFirst()
             return@create when (postList) {
-                null -> it.onError(NullPointerException("Not found"))
-                else -> it.onSuccess(r.copyFromRealm(postList).timeStamp)
+                null -> {
+                    r.close()
+                    it.onError(NullPointerException("Not found"))
+                }
+                else -> {
+                    val t = r.copyFromRealm(postList).timeStamp
+                    r.close()
+                    it.onSuccess(t)
+                }
             }
         } catch (e: Exception) {
             it.onError(e)
