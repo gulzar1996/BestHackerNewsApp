@@ -37,10 +37,8 @@ class HomeActivity : BaseActivity(), IHomeView {
         listUISetup()
         toolbarSetup()
 
-        homePresenter.setup()
 
     }
-
 
 
     private fun toolbarSetup() {
@@ -61,7 +59,7 @@ class HomeActivity : BaseActivity(), IHomeView {
     override fun addToAdapter(post: ArrayList<Post>) {
         hackerNewsAdapter.addItems(post)
         hackerNewsAdapter.hasStableIds()
-        hackerNewsAdapter.notifyDataSetChanged()
+        //hackerNewsAdapter.notifyDataSetChanged()
     }
 
     override fun deleteAdapter() {
@@ -83,8 +81,18 @@ class HomeActivity : BaseActivity(), IHomeView {
         startActivity(i)
     }
 
-    override fun onDestroy() {
+    override fun onStart() {
+        super.onStart()
+        homePresenter.setup()
+
+    }
+
+    override fun onStop() {
         homePresenter.onDetach()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
         super.onDestroy()
 
     }

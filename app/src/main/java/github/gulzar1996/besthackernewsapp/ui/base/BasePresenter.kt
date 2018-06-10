@@ -21,7 +21,7 @@ open class BasePresenter<V : IBaseView, I : IBaseInteractor>
     }
 
     override fun onDetach() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
 }

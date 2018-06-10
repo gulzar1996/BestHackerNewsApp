@@ -30,11 +30,10 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
     lateinit var paginator: PublishProcessor<Int>
     var currentPage = 0
 
-    init {
-        loadPost()
-    }
 
     override fun setup() {
+
+        loadPost()
 
         compositeDisposable.add(rxBus.listen(HackerNewsAdapter.HackerNewsPaginator::class.java)
                 .subscribe({
@@ -46,6 +45,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                     getView.navigateToDetailActivity(it.id.toInt())
                 }))
 
+        getView.getRefresh().isRefreshing = false
         compositeDisposable.add(
                 RxSwipeRefreshLayout.refreshes(getView.getRefresh())
                         .subscribeBy(
