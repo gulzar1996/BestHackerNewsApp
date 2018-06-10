@@ -16,6 +16,6 @@ interface IHomeView : IBaseView {
 
     fun setLastRefershedTime(string: String)
 
-    fun navigateToDetailActivity()
+    fun navigateToDetailActivity(postId: Int)
 
 }

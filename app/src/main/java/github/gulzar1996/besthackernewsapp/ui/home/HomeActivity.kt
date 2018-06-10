@@ -1,19 +1,21 @@
 package github.gulzar1996.besthackernewsapp.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
+import github.gulzar1996.besthackernewsapp.Const
 import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.data.Post
 import github.gulzar1996.besthackernewsapp.ui.base.BaseActivity
+import github.gulzar1996.besthackernewsapp.ui.detail.DetailActivity
 import github.gulzar1996.besthackernewsapp.utils.rx.RxBus
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
 
 class HomeActivity : BaseActivity(), IHomeView {
-
 
 
     @Inject
@@ -38,6 +40,8 @@ class HomeActivity : BaseActivity(), IHomeView {
         homePresenter.setup()
 
     }
+
+
 
     private fun toolbarSetup() {
         setSupportActionBar(toolbar)
@@ -73,8 +77,10 @@ class HomeActivity : BaseActivity(), IHomeView {
         refreshedTime.text = string
     }
 
-    override fun navigateToDetailActivity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun navigateToDetailActivity(postId: Int) {
+        val i = Intent(this, DetailActivity::class.java)
+        i.putExtra(Const.POST_ID, postId)
+        startActivity(i)
     }
 
     override fun onDestroy() {
@@ -82,4 +88,8 @@ class HomeActivity : BaseActivity(), IHomeView {
         super.onDestroy()
 
     }
+
+    override fun onFragmentDetached(tag: String) {}
+
+    override fun onFragmentAttached() {}
 }

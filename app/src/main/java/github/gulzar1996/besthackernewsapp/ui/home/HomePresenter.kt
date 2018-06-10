@@ -43,7 +43,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
 
         compositeDisposable.add(rxBus.listen(HackerNewsAdapter.HackerNewsClick::class.java)
                 .subscribe({
-                    getView.navigateToDetailActivity()
+                    getView.navigateToDetailActivity(it.id.toInt())
                 }))
 
         compositeDisposable.add(
