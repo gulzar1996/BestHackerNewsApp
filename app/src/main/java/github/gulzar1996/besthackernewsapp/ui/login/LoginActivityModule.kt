@@ -10,15 +10,13 @@ import github.gulzar1996.besthackernewsapp.ui.login.IloginInteractor
 @Module
 class LoginActivityModule {
 
-//    @Provides
-//    fun provideDetailPresenter(presenter: LoginPresenter_Factory<ILoginView, IloginInteractor>)
-//            : ILoginPresenter<ILoginView, IloginInteractor> = presenter
-//
-//    @Provides
-//    fun provideLoginInteractor(interactor: LoginInteractor)
-//            : IloginInteractor = interactor
+    @Provides
+    fun provideDetailPresenter(presenter: LoginPresenter<ILoginView, IloginInteractor>)
+            : ILoginPresenter<ILoginView, IloginInteractor> = presenter
 
     @Provides
-    fun linearLayoutManager(context: Context) = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    fun provideLoginInteractor(interactor: LoginInteractor)
+            : IloginInteractor = interactor
+
 
 }

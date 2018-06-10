@@ -8,9 +8,13 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class LoginPresenter<V : ILoginView, I : IloginInteractor>
-
+@Inject
 constructor(schedulerProvider: SchedulerProvider, compositeDisposable: CompositeDisposable, interactor: I)
     : BasePresenter<V, I>(schedulerProvider, compositeDisposable, interactor),
         ILoginPresenter<V, I> {
+
+    override fun onSignInButtonClick() {
+        getView.showSignInDialog()
+    }
 
 }
