@@ -55,11 +55,19 @@ class DetailActivity : BaseActivity(), IDetailView {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
-    override fun addCommentFragment() =
-            viewPagerAdapter.addContainer(CommentFragment(), "COMMENT")
+    override fun addCommentFragment(postId: Int) {
+        val b = Bundle()
+        b.putInt(Const.POST_ID, postId)
+        viewPagerAdapter.addContainer(CommentFragment(), "COMMENT", b)
 
-    override fun addWebViewFragmet() =
-            viewPagerAdapter.addContainer(WebFragment(), "WEB")
+    }
+
+    override fun addWebViewFragmet(postId: Int) {
+        val b = Bundle()
+        b.putInt(Const.POST_ID, postId)
+        viewPagerAdapter.addContainer(WebFragment(), "WEB", b)
+
+    }
 
 
     override fun setUpTabs() {
