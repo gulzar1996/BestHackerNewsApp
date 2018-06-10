@@ -97,7 +97,7 @@ class HomeInteractor @Inject constructor() : IHomeInteractor {
      * Only used when retrieving from cache
      * This is used to retrieve post details from persistence if available
      * otherwise from network
-     * Hack is used to fallback to network by making the post id =-1
+     * Hack is used to fallback to network by making the post.id =-1
      */
     private fun getPostDetails(it: String, isCacheDirty: Boolean) =
 

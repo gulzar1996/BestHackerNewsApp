@@ -15,6 +15,7 @@ import javax.inject.Inject
 class HomeActivity : BaseActivity(), IHomeView {
 
 
+
     @Inject
     lateinit var homePresenter: HomePresenter<IHomeView, IHomeInteractor>
 
@@ -34,7 +35,7 @@ class HomeActivity : BaseActivity(), IHomeView {
         listUISetup()
         toolbarSetup()
 
-        homePresenter.paginationSetup()
+        homePresenter.setup()
 
     }
 
@@ -70,6 +71,10 @@ class HomeActivity : BaseActivity(), IHomeView {
     override fun setLastRefershedTime(string: String) {
         refreshedTime.visibility = View.VISIBLE
         refreshedTime.text = string
+    }
+
+    override fun navigateToDetailActivity() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onDestroy() {

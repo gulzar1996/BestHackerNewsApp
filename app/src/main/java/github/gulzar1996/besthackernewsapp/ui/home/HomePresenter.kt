@@ -34,11 +34,16 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
         loadPost()
     }
 
-    override fun paginationSetup() {
+    override fun setup() {
 
         compositeDisposable.add(rxBus.listen(HackerNewsAdapter.HackerNewsPaginator::class.java)
                 .subscribe({
                     paginator.onNext(currentPage)
+                }))
+
+        compositeDisposable.add(rxBus.listen(HackerNewsAdapter.HackerNewsClick::class.java)
+                .subscribe({
+                    getView.navigateToDetailActivity()
                 }))
 
         compositeDisposable.add(

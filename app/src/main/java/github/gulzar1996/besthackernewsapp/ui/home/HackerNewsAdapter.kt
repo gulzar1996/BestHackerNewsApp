@@ -50,7 +50,7 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            TYPE_NEWS_CARD -> (holder as ViewH).bind(posts[position])
+            TYPE_NEWS_CARD -> (holder as ViewH).bind(posts[position], rxBus)
             TYPE_PROGRESS -> holder
         }
         positionTracker(position)
@@ -64,13 +64,14 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
     }
 
     class NewsCardViewholder(itemView: View?) : RecyclerView.ViewHolder(itemView), ViewH {
-        override fun bind(post: Post) {
+        override fun bind(post: Post, rxBus: RxBus) {
             itemView.header_label.text = post.title
             itemView.upVotes.text = post.score.toString()
             itemView.url.text = post.url
             itemView.descendant.text = post.descendants
             itemView.by.text = post.by
             itemView.time.text = PrettyTime().format(Date(post.time * 1000))
+            itemView.setOnClickListener { rxBus.publish(HackerNewsClick()) }
 
         }
     }
@@ -78,9 +79,11 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
     class ProgressViewholder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 
     interface ViewH {
-        fun bind(post: Post)
+        fun bind(post: Post, rxBus: RxBus)
     }
 
     open class HackerNewsPaginator()
+
+    open class HackerNewsClick()
 
 }

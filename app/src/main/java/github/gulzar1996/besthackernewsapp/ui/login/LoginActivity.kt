@@ -36,7 +36,6 @@ class LoginActivity : BaseActivity(), ILoginView {
     lateinit var compositeDisposable: CompositeDisposable
 
     private val RC_SIGN_IN = 9001
-    private val TAG = javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
