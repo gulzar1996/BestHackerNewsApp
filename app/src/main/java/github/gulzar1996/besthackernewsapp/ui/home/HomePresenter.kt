@@ -33,7 +33,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
 
     override fun setup() {
 
-        loadPost()
+        paginationSetup()
 
         compositeDisposable.add(rxBus.listen(HackerNewsAdapter.HackerNewsPaginator::class.java)
                 .subscribe({
@@ -61,7 +61,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
         )
     }
 
-    fun loadPost() {
+    private fun paginationSetup() {
 
 
         paginator = PublishProcessor.create()
