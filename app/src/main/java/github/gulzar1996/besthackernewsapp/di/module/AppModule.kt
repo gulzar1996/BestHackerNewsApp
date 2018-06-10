@@ -7,6 +7,7 @@ import dagger.Provides
 import github.gulzar1996.besthackernewsapp.Const
 import github.gulzar1996.besthackernewsapp.data.db.HackerNewsLocal
 import github.gulzar1996.besthackernewsapp.data.network.HackerNewsRemote
+import github.gulzar1996.besthackernewsapp.di.component.DetailActivityComponent
 import github.gulzar1996.besthackernewsapp.utils.rx.AppSchedulerProvider
 import github.gulzar1996.besthackernewsapp.utils.rx.RxBus
 import github.gulzar1996.besthackernewsapp.utils.rx.SchedulerProvider
@@ -16,7 +17,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@Module
+@Module(subcomponents = [(DetailActivityComponent::class)])
 class AppModule {
 
     @Provides
