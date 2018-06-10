@@ -5,6 +5,8 @@ import dagger.android.ContributesAndroidInjector
 import github.gulzar1996.besthackernewsapp.ui.detail.DetailActivity
 import github.gulzar1996.besthackernewsapp.ui.detail.DetailActivityModule
 import github.gulzar1996.besthackernewsapp.ui.detail.LoginActivityModule
+import github.gulzar1996.besthackernewsapp.ui.detail.comment.di.CommentFragmentProvider
+import github.gulzar1996.besthackernewsapp.ui.detail.webview.di.WebFragmentProvider
 import github.gulzar1996.besthackernewsapp.ui.home.HomeActivity
 import github.gulzar1996.besthackernewsapp.ui.home.HomeActivityModule
 import github.gulzar1996.besthackernewsapp.ui.login.LoginActivity
@@ -18,7 +20,7 @@ abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = [(LoginActivityModule::class)])
     abstract fun bindLoginActivity(): LoginActivity
 
-    @ContributesAndroidInjector(modules = [(DetailActivityModule::class)])
+    @ContributesAndroidInjector(modules = [(DetailActivityModule::class), (WebFragmentProvider::class), (CommentFragmentProvider::class)])
     abstract fun bindDetailActivity(): DetailActivity
 
 }

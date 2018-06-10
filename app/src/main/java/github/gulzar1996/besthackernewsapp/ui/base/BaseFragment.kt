@@ -19,8 +19,8 @@ open class BaseFragment : Fragment(), IBaseView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        performDependencyInjection()
         super.onCreate(savedInstanceState)
-       // performDependencyInjection()
 
     }
 
