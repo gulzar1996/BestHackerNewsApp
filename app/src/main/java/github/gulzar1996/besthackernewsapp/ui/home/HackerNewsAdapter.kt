@@ -68,7 +68,7 @@ class HackerNewsAdapter(val rxBus: RxBus) : RecyclerView.Adapter<RecyclerView.Vi
             itemView.header_label.text = post.title
             itemView.upVotes.text = post.score.toString()
             itemView.url.text = post.url
-            itemView.descendant.text = post.descendants
+            itemView.descendant.text = post.kids.size.toString()
             itemView.by.text = post.by
             itemView.time.text = PrettyTime().format(Date(post.time * 1000))
             itemView.setOnClickListener { rxBus.publish(HackerNewsClick(post.id)) }

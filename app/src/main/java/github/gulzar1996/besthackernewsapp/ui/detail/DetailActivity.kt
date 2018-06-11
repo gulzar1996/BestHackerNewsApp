@@ -2,6 +2,7 @@ package github.gulzar1996.besthackernewsapp.ui.detail
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.View
 import android.widget.Toast
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -64,10 +65,10 @@ class DetailActivity : BaseActivity(), IDetailView, HasSupportFragmentInjector {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
-    override fun addCommentFragment(postId: Int) {
+    override fun addCommentFragment(postId: Int, commentCount: Int) {
         val b = Bundle()
         b.putInt(Const.POST_ID, postId)
-        viewPagerAdapter.addContainer(CommentFragment(), "COMMENT", b)
+        viewPagerAdapter.addContainer(CommentFragment(), "COMMENT ($commentCount)", b)
 
     }
 
@@ -82,6 +83,23 @@ class DetailActivity : BaseActivity(), IDetailView, HasSupportFragmentInjector {
     override fun setUpTabs() {
         viewpager.adapter = viewPagerAdapter
         tabs.setupWithViewPager(viewpager)
+    }
+
+    override fun showTitle(t: String) {
+        titlet.text = t
+    }
+
+    override fun showUrl(url: String) {
+        urlt.visibility = View.VISIBLE
+        urlt.text = url
+    }
+
+    override fun showTime(time: String) {
+        timet.text = time
+    }
+
+    override fun showAuthor(author: String) {
+        usert.text = author
     }
 
 
