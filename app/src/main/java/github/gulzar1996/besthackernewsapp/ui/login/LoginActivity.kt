@@ -78,6 +78,7 @@ class LoginActivity : BaseActivity(), ILoginView {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient?.signOut()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
