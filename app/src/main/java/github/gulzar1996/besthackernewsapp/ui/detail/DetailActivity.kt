@@ -51,8 +51,12 @@ class DetailActivity : BaseActivity(), IDetailView, HasSupportFragmentInjector {
     private fun setUpToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.title = ""
         collapsableToolbar.title = ""
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
 
