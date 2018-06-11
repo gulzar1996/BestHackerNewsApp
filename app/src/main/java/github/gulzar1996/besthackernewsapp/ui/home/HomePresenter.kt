@@ -45,7 +45,6 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                     getView.navigateToDetailActivity(it.id.toInt())
                 }))
 
-        getView.getRefresh().isRefreshing = false
         compositeDisposable.add(
                 RxSwipeRefreshLayout.refreshes(getView.getRefresh())
                         .subscribeBy(
@@ -59,6 +58,16 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                                 }
                         )
         )
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        restoreState()
+    }
+
+    fun restoreState() {
+        getView.getRefresh().isRefreshing = false
+        isLoading = false
     }
 
     private fun paginationSetup() {
@@ -78,6 +87,7 @@ constructor(schedulerProvider: SchedulerProvider, compositeDisposable: Composite
                             .toFlowable()
                             .retryWhen { it -> it }
                 }
+                .filter { !it.isEmpty() }
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe({ it ->

@@ -56,6 +56,7 @@ class HomeActivity : BaseActivity(), IHomeView {
                 val auth = FirebaseAuth.getInstance()
                 auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)
