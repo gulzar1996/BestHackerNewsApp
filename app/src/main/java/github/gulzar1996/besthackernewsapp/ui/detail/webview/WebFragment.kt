@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import github.gulzar1996.besthackernewsapp.Const
 import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_webiew.*
 import javax.inject.Inject
+
 
 class WebFragment : BaseFragment(), IWebFragmentView {
 
@@ -33,15 +35,15 @@ class WebFragment : BaseFragment(), IWebFragmentView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
-        bundle.let {
-            postId = it?.get(Const.POST_ID) as Int
-        }
+
+        postId = bundle?.get(Const.POST_ID) as Int
         presenter.onAttach(this)
-        postId?.let { presenter.loadUrl(it) }
+        presenter.loadUrl(postId)
 
     }
 
     override fun loadUrl(url: String) {
+        webV?.webViewClient = WebViewClient()
         webV?.loadUrl(url)
     }
 }
