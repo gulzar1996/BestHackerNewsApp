@@ -23,12 +23,15 @@ class CommentFragmentInteractor @Inject constructor() : ICommentFragmentInteract
     val TAG = javaClass.simpleName
 
 
-    override fun getCommentList(postId: Int, isListCacheDirty: Boolean, pageNo: Int): Single<List<Comment>> =
-            Observable.concat(
-                    getFromDisk(postId, pageNo).onErrorResumeNext(Observable.empty()),
-                    getFromNetwork(postId, pageNo))
-                    .filter { !it.isEmpty() }
-                    .first(emptyList())
+    override fun getCommentList(postId: Int, isListCacheDirty: Boolean, pageNo: Int): Single<List<Comment>> {
+        Log.d(TAG,"getCommentList func called")
+      return  Observable.concat(
+                getFromDisk(postId, pageNo).onErrorResumeNext(Observable.empty()),
+                getFromNetwork(postId, pageNo))
+                .filter { !it.isEmpty() }
+                .first(emptyList())
+
+    }
 
 
     fun getFromNetwork(postId: Int, page: Int): Observable<List<Comment>> =
@@ -41,7 +44,7 @@ class CommentFragmentInteractor @Inject constructor() : ICommentFragmentInteract
                     .skip(((pageLimit * (page + 1)) - pageLimit).toLong())
                     .take(pageLimit.toLong())
                     .concatMapEager { hackerNewsRemote.getCommentDetails(it.toInt()) }
-                    .doOnNext { Log.d("CommentInteractor", it.text) }
+                    .filter { !it.text.isEmpty() }
                     .map { it -> hackerNewsLocal.saveComment(it) }
                     .toList()
                     .toObservable()
@@ -65,6 +68,7 @@ class CommentFragmentInteractor @Inject constructor() : ICommentFragmentInteract
                     .concatMapEager { it ->
                         getCommentDetails(it)
                     }
+                    .filter { !it.text.isEmpty() }
                     .doOnNext({ Log.d(TAG, "Loaded  : ${it}") })
 
                     .toList()
