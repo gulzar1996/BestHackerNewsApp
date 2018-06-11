@@ -3,13 +3,17 @@ package github.gulzar1996.besthackernewsapp.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import github.gulzar1996.besthackernewsapp.Const
 import github.gulzar1996.besthackernewsapp.R
 import github.gulzar1996.besthackernewsapp.data.Post
 import github.gulzar1996.besthackernewsapp.ui.base.BaseActivity
 import github.gulzar1996.besthackernewsapp.ui.detail.DetailActivity
+import github.gulzar1996.besthackernewsapp.ui.login.LoginActivity
 import github.gulzar1996.besthackernewsapp.utils.rx.RxBus
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
@@ -38,6 +42,23 @@ class HomeActivity : BaseActivity(), IHomeView {
         toolbarSetup()
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.home_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.logout -> {
+                val auth = FirebaseAuth.getInstance()
+                auth.signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -90,11 +111,6 @@ class HomeActivity : BaseActivity(), IHomeView {
     override fun onStop() {
         homePresenter.onDetach()
         super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
     }
 
     override fun onFragmentDetached(tag: String) {}
