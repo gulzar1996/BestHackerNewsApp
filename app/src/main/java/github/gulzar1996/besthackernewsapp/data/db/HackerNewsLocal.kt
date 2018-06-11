@@ -77,9 +77,27 @@ class HackerNewsLocal : IHackerNewsLocal {
         return post
     }
 
-    override fun getComment(commentId: Int): Single<Comment> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getComment(commentId: Int): Single<Comment> =
+            Single.create({
+                try {
+                    val r: Realm = Realm.getDefaultInstance()
+                    val comment: Comment? = r.where<Comment>().equalTo(Post.ID, commentId).findFirst()
+                    return@create when (comment) {
+                        null -> {
+                            r.close()
+                            it.onError(NullPointerException("Not found"))
+                        }
+                        else -> {
+                            val t = r.copyFromRealm(comment)
+                            r.close()
+                            it.onSuccess(t)
+                        }
+                    }
+                } catch (e: Exception) {
+                    it.onError(e)
+                }
+            })
+
 
     /**
      * Save top post Id List and timestamp to persistence to persistence
@@ -119,8 +137,17 @@ class HackerNewsLocal : IHackerNewsLocal {
         }
     })
 
-    override fun saveComment(comment: Comment): Single<Comment> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun saveComment(comment: Comment): Comment {
+        val r: Realm = Realm.getDefaultInstance()
+        try {
+            r.executeTransaction({
+                r.insertOrUpdate(comment)
+            })
+        } catch (e: Exception) {
+        } finally {
+            r.close()
+        }
+        return comment
     }
 
 }

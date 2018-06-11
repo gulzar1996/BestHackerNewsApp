@@ -17,7 +17,7 @@ interface IHackerNewsLocal {
 
     fun saveTopPostList(ids: PostList): PostList
 
-    fun saveComment(comment: Comment): Single<Comment>
+    fun saveComment(comment: Comment): Comment
 
     fun getLastRefreshedTime(): Single<Long>
 
